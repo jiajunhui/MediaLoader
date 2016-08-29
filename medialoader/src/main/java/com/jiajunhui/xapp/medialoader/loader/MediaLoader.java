@@ -5,7 +5,9 @@ import android.support.v4.app.FragmentActivity;
 import com.jiajunhui.xapp.medialoader.base.AbsLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.AudioCursorLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.callback.OnPhotoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.callback.OnVideoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.PhotoCursorLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.VideoCursorLoaderCallBack;
@@ -20,8 +22,16 @@ public class MediaLoader {
         activity.getSupportLoaderManager().restartLoader(0,null,absLoaderCallBack);
     }
 
+    public static void loadPhotoFolders(FragmentActivity activity, OnPhotoFolderLoaderCallBack onPhotoFolderLoaderCallBack){
+        loadMedia(activity,new PhotoCursorLoaderCallBack(activity.getApplicationContext(),onPhotoFolderLoaderCallBack));
+    }
+
     public static void loadPhotos(FragmentActivity activity, OnPhotoLoaderCallBack onPhotoLoaderCallBack){
         loadMedia(activity,new PhotoCursorLoaderCallBack(activity.getApplicationContext(),onPhotoLoaderCallBack));
+    }
+
+    public static void loadVideoFolders(FragmentActivity activity, OnVideoFolderLoaderCallBack onVideoFolderLoaderCallBack){
+        loadMedia(activity,new VideoCursorLoaderCallBack(activity.getApplicationContext(),onVideoFolderLoaderCallBack));
     }
 
     public static void loadVideos(FragmentActivity activity, OnVideoLoaderCallBack onVideoLoaderCallBack){

@@ -10,7 +10,7 @@ import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.MediaColumns.DATA;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
-import static android.provider.MediaStore.Audio.AudioColumns.SIZE;
+import static android.provider.MediaStore.MediaColumns.SIZE;
 
 /**
  * Created by Taurus on 16/8/28.
@@ -22,12 +22,12 @@ public abstract class OnAudioLoaderCallBack implements OnLoaderCallBack {
         AudioItem item;
         while (data.moveToNext()) {
             item = new AudioItem();
-            int imageId = data.getInt(data.getColumnIndexOrThrow(_ID));
+            int audioId = data.getInt(data.getColumnIndexOrThrow(_ID));
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
-            item.setId(imageId);
+            item.setId(audioId);
             item.setDisplayName(name);
             item.setPath(path);
             item.setDuration(duration);

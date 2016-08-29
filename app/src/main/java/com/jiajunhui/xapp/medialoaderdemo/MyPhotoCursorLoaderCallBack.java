@@ -1,4 +1,4 @@
-package com.jiajunhui.xapp.medialoader.callback;
+package com.jiajunhui.xapp.medialoaderdemo;
 
 import android.content.Context;
 import android.provider.MediaStore;
@@ -6,11 +6,10 @@ import com.jiajunhui.xapp.medialoader.base.BasePhotoCursorLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.inter.OnLoaderCallBack;
 
 /**
- * Created by Taurus on 16/8/28.
+ * Created by Taurus on 2016/8/29.
  */
-public class PhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
-
-    public PhotoCursorLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack) {
+public class MyPhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
+    public MyPhotoCursorLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack) {
         super(context, onLoaderCallBack);
     }
 
@@ -22,6 +21,8 @@ public class PhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.WIDTH,
+                MediaStore.Images.Media.HEIGHT,
                 MediaStore.Images.Media.DATE_MODIFIED
         };
         return PROJECTION;
@@ -29,12 +30,11 @@ public class PhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
 
     @Override
     public String getSelections() {
-        return MediaStore.MediaColumns.SIZE + " > ?";
+        return MediaStore.MediaColumns.SIZE + " > ?" + " and " + MediaStore.Images.Media.WIDTH + " > ? and " + MediaStore.Images.Media.HEIGHT + " > ?";
     }
 
     @Override
     public String[] getSelectionsArgs() {
-        return new String[]{"0"};
+        return new String[]{"0","500","500"};
     }
-
 }

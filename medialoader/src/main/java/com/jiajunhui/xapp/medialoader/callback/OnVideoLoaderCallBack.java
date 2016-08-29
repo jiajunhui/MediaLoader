@@ -10,7 +10,7 @@ import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.MediaColumns.DATA;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.Video.VideoColumns.DURATION;
-import static android.provider.MediaStore.Video.VideoColumns.SIZE;
+import static android.provider.MediaStore.MediaColumns.SIZE;
 
 /**
  * Created by Taurus on 16/8/28.

@@ -44,4 +44,15 @@
         android:textSize="16sp"
         android:textColor="#3344aa"
         android:text="" />
+
+    <TextView
+        android:id="@+id/tv_custom"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:background="#aaaaaa"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="#3344aa"
+        android:text="自定义加载" />
 </LinearLayout>

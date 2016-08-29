@@ -1,18 +1,23 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import com.jiajunhui.xapp.medialoader.bean.AudioItem;
+import com.jiajunhui.xapp.medialoader.bean.PhotoFolder;
 import com.jiajunhui.xapp.medialoader.bean.PhotoItem;
+import com.jiajunhui.xapp.medialoader.bean.VideoFolder;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.callback.OnPhotoFolderLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.callback.OnVideoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_video_info;
     private TextView tv_audio_info;
     private TextView tv_query_info;
+    private TextView tv_custom;
 
     private final int MSG_PHOTO_OVER = 100;
     private final int MSG_VIDEO_OVER = 101;
@@ -32,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case MSG_PHOTO_OVER:
-                    loadVideos();
+                    loadVideoFolders();
                     break;
 
                 case MSG_VIDEO_OVER:
@@ -56,9 +62,35 @@ public class MainActivity extends AppCompatActivity {
         tv_video_info = (TextView) findViewById(R.id.tv_video_info);
         tv_audio_info = (TextView) findViewById(R.id.tv_audio_info);
         tv_query_info = (TextView) findViewById(R.id.tv_query_info);
+        tv_custom = (TextView) findViewById(R.id.tv_custom);
+
+        tv_custom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),CustomLoadActivity.class);
+                startActivity(intent);
+            }
+        });
 
         start = System.currentTimeMillis();
 
+//        loadPhotos();
+
+        loadPhotoFolders();
+
+    }
+
+    private void loadPhotoFolders() {
+        MediaLoader.loadPhotoFolders(this, new OnPhotoFolderLoaderCallBack() {
+            @Override
+            public void onResultFolders(List<PhotoFolder> folders) {
+                tv_photo_info.setText("图片目录: " + folders.size() + " 个" + " 共: " + folders.get(0).getItems().size() + " 张图片");
+                handler.sendEmptyMessage(MSG_PHOTO_OVER);
+            }
+        });
+    }
+
+    private void loadPhotos() {
         MediaLoader.loadPhotos(this, new OnPhotoLoaderCallBack() {
             @Override
             public void onResultList(List<PhotoItem> items) {
@@ -66,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(MSG_PHOTO_OVER);
             }
         });
-
     }
 
     private void loadAudios() {
@@ -84,6 +115,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResultList(List<VideoItem> items) {
                 tv_video_info.setText("视频: " + items.size() + " 个");
+                handler.sendEmptyMessage(MSG_VIDEO_OVER);
+            }
+        });
+    }
+
+    private void loadVideoFolders(){
+        MediaLoader.loadVideoFolders(this, new OnVideoFolderLoaderCallBack() {
+            @Override
+            public void onResultFolders(List<VideoFolder> folders, int totalNum) {
+                tv_video_info.setText("视频文件夹: " + folders.size() + " 个" + " 共: " + totalNum + " 个视频文件");
                 handler.sendEmptyMessage(MSG_VIDEO_OVER);
             }
         });
