@@ -1,10 +1,15 @@
-
 MediaLoader
 ====
 Use this library , you can load pictures,videos,audios very fast in Phone Storage.
 <br>
 Usage
 ====
+###add permission
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+```
+<br>
+In android M device , please pay attention to the Runtime Permission.
 ###Default Loader
 ####Load Images
 load images folders
