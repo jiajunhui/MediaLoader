@@ -1,7 +1,8 @@
 package com.jiajunhui.xapp.medialoader.loader;
 
+import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
-
 import com.jiajunhui.xapp.medialoader.base.AbsLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.AudioCursorLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
@@ -11,6 +12,7 @@ import com.jiajunhui.xapp.medialoader.callback.OnVideoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.PhotoCursorLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.VideoCursorLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.utils.UriGetPath;
 
 /**
  * Created by Taurus on 16/8/28.
@@ -40,6 +42,10 @@ public class MediaLoader {
 
     public static void loadAudios(FragmentActivity activity, OnAudioLoaderCallBack onAudioLoaderCallBack){
         loadMedia(activity,new AudioCursorLoaderCallBack(activity.getApplicationContext(),onAudioLoaderCallBack));
+    }
+
+    public static String getPathFromUri(Context context, Uri uri){
+        return UriGetPath.getPath(context, uri);
     }
 
 }
