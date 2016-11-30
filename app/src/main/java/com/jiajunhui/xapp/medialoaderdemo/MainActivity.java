@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.jiajunhui.xapp.medialoader.bean.AudioItem;
+import com.jiajunhui.xapp.medialoader.bean.MediaType;
 import com.jiajunhui.xapp.medialoader.bean.PhotoFolder;
 import com.jiajunhui.xapp.medialoader.bean.PhotoItem;
 import com.jiajunhui.xapp.medialoader.bean.VideoFolder;
@@ -17,7 +20,10 @@ import com.jiajunhui.xapp.medialoader.callback.OnPhotoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoFolderLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.inter.OnLoadListener;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
+import com.jiajunhui.xapp.medialoader.utils.RecursionLoader;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
 //        loadPhotos();
 
         loadPhotoFolders();
+
+        RecursionLoader.loadMedia(MediaType.IMAGE, new OnLoadListener<PhotoItem>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onResultList(List<PhotoItem> result) {
+                Toast.makeText(MainActivity.this, "image num : " + result.size(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

@@ -73,6 +73,8 @@ public class UriGetPath {
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
+        }else if(uri!=null){
+            return uri.getPath();
         }
 
         return null;
