@@ -74,7 +74,9 @@ public class UriGetPath {
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }else if(uri!=null){
-            return uri.getPath();
+            String scheme = uri.getScheme();
+            String ssp = uri.getEncodedSchemeSpecificPart();
+            return scheme + ":" + ssp;
         }
 
         return null;
