@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 jiajunhui
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.jiajunhui.xapp.medialoader.utils;
 
 import android.annotation.SuppressLint;
@@ -15,7 +31,7 @@ import android.provider.MediaStore;
  */
 public class UriGetPath {
     /**
-     * 专为Android4.4设计的从Uri获取文件绝对路径，以前的方法已不好使
+     * Designed for Android4.4 from Uri to obtain the absolute path of the file, the previous method has not been so
      */
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
