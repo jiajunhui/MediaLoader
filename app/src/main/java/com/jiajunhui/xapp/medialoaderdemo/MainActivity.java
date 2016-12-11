@@ -1,8 +1,10 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,10 @@ import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
 import com.jiajunhui.xapp.medialoader.utils.RecursionLoader;
 
 import java.util.List;
+
+import kr.co.namee.permissiongen.PermissionFail;
+import kr.co.namee.permissiongen.PermissionGen;
+import kr.co.namee.permissiongen.PermissionSuccess;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,34 +84,54 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        start = System.currentTimeMillis();
+        PermissionGen.with(MainActivity.this)
+                .addRequestCode(100)
+                .permissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                .request();
 
-//        loadPhotos();
+//        loadPhotoFolders();
 
-        loadPhotoFolders();
-
-        RecursionLoader.loadMedia(MediaType.IMAGE, new OnLoadListener<PhotoItem>() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onResultList(List<PhotoItem> result) {
-                Toast.makeText(MainActivity.this, "image num : " + result.size(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        RecursionLoader.loadMedia(MediaType.IMAGE, new OnLoadListener<PhotoItem>() {
+//            @Override
+//            public void onStart() {
+//
+//            }
+//
+//            @Override
+//            public void onResultList(List<PhotoItem> result) {
+//                Toast.makeText(MainActivity.this, "image num : " + result.size(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
-    private void loadPhotoFolders() {
-        MediaLoader.loadPhotoFolders(this, new OnPhotoFolderLoaderCallBack() {
-            @Override
-            public void onResultFolders(List<PhotoFolder> folders) {
-                tv_photo_info.setText("图片目录: " + folders.size() + " 个" + " 共: " + folders.get(0).getItems().size() + " 张图片");
-                handler.sendEmptyMessage(MSG_PHOTO_OVER);
-            }
-        });
+//    private void loadPhotoFolders() {
+//        MediaLoader.loadPhotoFolders(this, new OnPhotoFolderLoaderCallBack() {
+//            @Override
+//            public void onResultFolders(List<PhotoFolder> folders) {
+//                tv_photo_info.setText("图片目录: " + folders.size() + " 个" + " 共: " + folders.get(0).getItems().size() + " 张图片");
+//                handler.sendEmptyMessage(MSG_PHOTO_OVER);
+//            }
+//        });
+//    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @PermissionSuccess(requestCode = 100)
+    public void onPermissionSuccess(){
+        start = System.currentTimeMillis();
+        loadPhotos();
+    }
+
+    @PermissionFail(requestCode = 100)
+    public void onPermissionFail(){
+        Toast.makeText(this, "permission deny", Toast.LENGTH_SHORT).show();
     }
 
     private void loadPhotos() {
