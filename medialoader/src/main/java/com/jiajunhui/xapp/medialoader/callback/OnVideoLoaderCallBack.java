@@ -30,6 +30,7 @@ public abstract class OnVideoLoaderCallBack extends OnMediaLoaderCallBack<VideoF
         List<VideoFolder> folders = new ArrayList<>();
         VideoFolder folder;
         VideoItem item;
+        long sum_size = 0;
         List<VideoItem> items = new ArrayList<>();
         while (data.moveToNext()) {
             String folderId = data.getString(data.getColumnIndexOrThrow(BUCKET_ID));
@@ -50,8 +51,10 @@ public abstract class OnVideoLoaderCallBack extends OnMediaLoaderCallBack<VideoF
                 folders.add(folder);
             }
             items.add(item);
+            sum_size += size;
         }
         onResult(folders,items);
+        onResultTotalSize(sum_size);
     }
 
     @Override

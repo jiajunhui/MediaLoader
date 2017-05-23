@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class BaseFileLoaderCallBack extends OnLoaderCallBack {
+public abstract class BaseFileLoaderCallBack extends BaseLoaderCallBack {
 
     public static final String VOLUME_NAME = "external";
 

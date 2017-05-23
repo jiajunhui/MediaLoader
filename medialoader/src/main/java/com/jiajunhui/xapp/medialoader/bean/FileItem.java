@@ -7,7 +7,6 @@ package com.jiajunhui.xapp.medialoader.bean;
 public class FileItem extends BaseItem {
 
     private String mime;
-    private long size;
 
     public String getMime() {
         return mime;
@@ -17,11 +16,4 @@ public class FileItem extends BaseItem {
         this.mime = mime;
     }
 
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
 }

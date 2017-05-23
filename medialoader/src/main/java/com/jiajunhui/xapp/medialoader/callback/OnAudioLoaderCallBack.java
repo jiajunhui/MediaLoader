@@ -27,6 +27,7 @@ public abstract class OnAudioLoaderCallBack extends OnMediaLoaderCallBack<BaseFo
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
         List<AudioItem> result = new ArrayList<>();
         AudioItem item;
+        long sum_size = 0;
         while (data.moveToNext()) {
             item = new AudioItem();
             int audioId = data.getInt(data.getColumnIndexOrThrow(_ID));
@@ -40,8 +41,10 @@ public abstract class OnAudioLoaderCallBack extends OnMediaLoaderCallBack<BaseFo
             item.setDuration(duration);
             item.setSize(size);
             result.add(item);
+            sum_size += size;
         }
         onResult(null,result);
+        onResultTotalSize(sum_size);
     }
 
     @Override

@@ -16,6 +16,7 @@ public class FileLoaderConfig {
             add("application/msword");
             add("application/vnd.ms-excel");
             add("application/vnd.ms-powerpoint");
+            add("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         }
     };
 

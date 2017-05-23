@@ -22,7 +22,6 @@ package com.jiajunhui.xapp.medialoader.bean;
  */
 public class AudioItem extends BaseItem {
     private long duration;
-    private long size;
 
     public long getDuration() {
         return duration;
@@ -32,11 +31,4 @@ public class AudioItem extends BaseItem {
         this.duration = duration;
     }
 
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
 }

@@ -25,14 +25,20 @@ public class BaseItem implements Serializable {
     private int id;
     private String displayName;
     private String path;
+    private long size;
 
     public BaseItem() {
     }
 
     public BaseItem(int id, String displayName, String path) {
+        this(id, displayName, path, 0);
+    }
+
+    public BaseItem(int id, String displayName, String path, long size) {
         this.id = id;
         this.displayName = displayName;
         this.path = path;
+        this.size = size;
     }
 
     public int getId() {
@@ -57,5 +63,13 @@ public class BaseItem implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

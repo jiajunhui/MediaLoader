@@ -35,6 +35,7 @@ public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack {
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
         List<FileItem> result = new ArrayList<>();
         FileItem item;
+        long sum_size = 0;
         while (data.moveToNext()) {
             item = new FileItem();
             int audioId = data.getInt(data.getColumnIndexOrThrow(BaseColumns._ID));
@@ -48,8 +49,10 @@ public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack {
             item.setSize(size);
             item.setMime(mime);
             result.add(item);
+            sum_size += size;
         }
         onResult(result);
+        onResultTotalSize(sum_size);
     }
 
 }

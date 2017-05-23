@@ -34,10 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_audio_info;
     private TextView tv_file_info;
 
-    private final int MSG_PHOTO_OVER = 100;
-    private final int MSG_VIDEO_OVER = 101;
-    private final int MSG_AUDIO_OVER = 102;
-
     private long start;
 
     @Override
@@ -111,6 +107,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(List<PhotoFolder> photoFolders, List<PhotoItem> photoItems) {
                 tv_photo_info.setText("图片: " + photoItems.size() + " 张");
             }
+
+            @Override
+            public void onResultTotalSize(long size) {
+                super.onResultTotalSize(size);
+                System.out.println("photo_size = " + size);
+            }
         });
     }
 
@@ -120,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(List<BaseFolder> baseFolders, List<AudioItem> audioItems) {
                 tv_audio_info.setText("音乐: " + audioItems.size() + " 个");
             }
+
+            @Override
+            public void onResultTotalSize(long size) {
+                super.onResultTotalSize(size);
+                System.out.println("audio_size = " + size);
+            }
         });
     }
 
@@ -128,6 +136,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(List<VideoFolder> videoFolders, List<VideoItem> videoItems) {
                 tv_video_info.setText("视频: " + videoItems.size() + " 个");
+            }
+
+            @Override
+            public void onResultTotalSize(long size) {
+                super.onResultTotalSize(size);
+                System.out.println("video_size = " + size);
             }
         });
     }

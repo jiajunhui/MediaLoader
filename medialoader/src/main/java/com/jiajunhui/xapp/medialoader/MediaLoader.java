@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.Loader;
+import android.util.Log;
 
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnFileLoaderCallBack;
@@ -24,11 +25,10 @@ import java.util.Queue;
 
 public class MediaLoader {
 
+    private final String TAG = "MediaLoader";
     private static MediaLoader loader = new MediaLoader();
     private Queue<LoaderTask> mLoadQueue = new LinkedList<>();
-    private boolean mLock = false;
 
-    private final int MSG_CODE_LOAD_RESET = 100;
     private final int MSG_CODE_LOAD_FINISH = 101;
     private final int MSG_CODE_LOAD_START = 102;
 
@@ -37,19 +37,16 @@ public class MediaLoader {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case MSG_CODE_LOAD_RESET:
-                    mLock = true;
-                    break;
                 case MSG_CODE_LOAD_FINISH:
-                    mLock = false;
                     sendEmptyMessage(MSG_CODE_LOAD_START);
                     break;
                 case MSG_CODE_LOAD_START:
-                    if(!mLock && mLoadQueue.size()>0){
+                    if(mLoadQueue.size()>0){
                         LoaderTask task = mLoadQueue.poll();
                         if(task!=null){
                             queueLoader(task.activity.get(),task.onLoaderCallBack);
                         }
+                        Log.d(TAG,"after poll current queue size = " + mLoadQueue.size());
                     }
                     break;
             }
@@ -67,8 +64,9 @@ public class MediaLoader {
         activity.getSupportLoaderManager().restartLoader(0,null,absLoaderCallBack);
     }
 
-    private synchronized void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
-        mLoadQueue.add(new LoaderTask(new WeakReference<>(activity),onLoaderCallBack));
+    private void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
+        mLoadQueue.offer(new LoaderTask(new WeakReference<>(activity),onLoaderCallBack));
+        Log.d(TAG,"after offer current queue size = " + mLoadQueue.size());
         if(mLoadQueue.size()==1){
             mHandler.sendEmptyMessage(MSG_CODE_LOAD_START);
         }
@@ -76,12 +74,6 @@ public class MediaLoader {
 
     private void queueLoader(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
         loadMedia(activity, new AbsLoaderCallBack(activity,onLoaderCallBack){
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-                super.onLoaderReset(loader);
-                mHandler.sendEmptyMessage(MSG_CODE_LOAD_RESET);
-            }
-
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
                 super.onLoadFinished(loader, data);
