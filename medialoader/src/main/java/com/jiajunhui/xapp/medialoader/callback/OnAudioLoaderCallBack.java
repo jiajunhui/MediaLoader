@@ -1,37 +1,28 @@
-/*
- * Copyright 2016 jiajunhui
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 package com.jiajunhui.xapp.medialoader.callback;
 
 import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.content.Loader;
+
 import com.jiajunhui.xapp.medialoader.bean.AudioItem;
-import com.jiajunhui.xapp.medialoader.inter.OnLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.bean.BaseFolder;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static android.provider.BaseColumns._ID;
+import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.MediaColumns.DATA;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
-import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.MediaColumns.SIZE;
 
 /**
- * Created by Taurus on 16/8/28.
+ * Created by Taurus on 2017/5/23.
  */
-public abstract class OnAudioLoaderCallBack implements OnLoaderCallBack {
+
+public abstract class OnAudioLoaderCallBack extends OnMediaLoaderCallBack<BaseFolder,AudioItem> {
+
     @Override
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
         List<AudioItem> result = new ArrayList<>();
@@ -50,8 +41,24 @@ public abstract class OnAudioLoaderCallBack implements OnLoaderCallBack {
             item.setSize(size);
             result.add(item);
         }
-        onResultList(result);
+        onResult(null,result);
     }
 
-    public abstract void onResultList(List<AudioItem> items);
+    @Override
+    public Uri getQueryUri() {
+        return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    }
+
+    @Override
+    public String[] getSelectProjection() {
+        String[] PROJECTION = {
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.MediaColumns.SIZE,
+                MediaStore.Audio.Media.DATE_MODIFIED
+        };
+        return PROJECTION;
+    }
 }

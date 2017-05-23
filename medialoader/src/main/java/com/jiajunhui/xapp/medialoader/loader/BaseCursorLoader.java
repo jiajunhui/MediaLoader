@@ -14,25 +14,24 @@
  *    limitations under the License.
  */
 
-package com.jiajunhui.xapp.medialoader.base;
+package com.jiajunhui.xapp.medialoader.loader;
 
 import android.content.Context;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 
-import com.jiajunhui.xapp.medialoader.inter.OnLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.inter.ILoader;
 
 /**
  * Created by Taurus on 16/8/28.
  */
-public abstract class BaseVideoCursorLoaderCallBack extends AbsLoaderCallBack {
-    public BaseVideoCursorLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack) {
-        super(context, onLoaderCallBack);
-    }
+public class BaseCursorLoader extends CursorLoader {
 
-    @Override
-    public Uri getQueryUri() {
-        return MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+    public BaseCursorLoader(Context context, ILoader iLoader) {
+        super(context);
+        setProjection(iLoader.getSelectProjection());
+        setUri(iLoader.getQueryUri());
+        setSelection(iLoader.getSelections());
+        setSelectionArgs(iLoader.getSelectionsArgs());
+        setSortOrder(iLoader.getSortOrderSql());
     }
-
 }
