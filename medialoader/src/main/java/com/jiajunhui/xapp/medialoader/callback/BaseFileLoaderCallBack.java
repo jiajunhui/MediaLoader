@@ -3,17 +3,14 @@ package com.jiajunhui.xapp.medialoader.callback;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.jiajunhui.xapp.medialoader.bean.FileItem;
 import com.jiajunhui.xapp.medialoader.bean.FileProperty;
 import com.jiajunhui.xapp.medialoader.bean.FileType;
-
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class BaseFileLoaderCallBack extends BaseLoaderCallBack {
+public abstract class BaseFileLoaderCallBack<T> extends BaseLoaderCallBack<T> {
 
     public static final String VOLUME_NAME = "external";
 
@@ -30,8 +27,6 @@ public abstract class BaseFileLoaderCallBack extends BaseLoaderCallBack {
     public BaseFileLoaderCallBack(FileProperty property){
         this.mProperty = property;
     }
-
-    public abstract void onResult(List<FileItem> items);
 
     @Override
     public Uri getQueryUri() {

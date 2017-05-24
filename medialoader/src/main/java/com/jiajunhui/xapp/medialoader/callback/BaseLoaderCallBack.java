@@ -6,10 +6,18 @@ import android.provider.MediaStore;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class BaseLoaderCallBack extends OnLoaderCallBack {
+public abstract class BaseLoaderCallBack<T> extends OnLoaderCallBack {
 
-    public void onResultTotalSize(long size){
+    public abstract void onResult(T result);
 
+    @Override
+    public String getSelections() {
+        return MediaStore.MediaColumns.SIZE + " > ?";
+    }
+
+    @Override
+    public String[] getSelectionsArgs() {
+        return new String[]{"0"};
     }
 
     @Override

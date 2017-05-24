@@ -6,7 +6,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.AudioItem;
-import com.jiajunhui.xapp.medialoader.bean.BaseFolder;
+import com.jiajunhui.xapp.medialoader.bean.AudioResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import static android.provider.MediaStore.MediaColumns.SIZE;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class OnAudioLoaderCallBack extends OnMediaLoaderCallBack<BaseFolder,AudioItem> {
+public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResult> {
 
     @Override
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
@@ -43,8 +43,7 @@ public abstract class OnAudioLoaderCallBack extends OnMediaLoaderCallBack<BaseFo
             result.add(item);
             sum_size += size;
         }
-        onResult(null,result);
-        onResultTotalSize(sum_size);
+        onResult(new AudioResult(sum_size,result));
     }
 
     @Override

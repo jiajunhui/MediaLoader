@@ -1,6 +1,7 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
 import android.Manifest;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,19 +9,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jiajunhui.xapp.medialoader.MediaLoader;
-import com.jiajunhui.xapp.medialoader.bean.AudioItem;
-import com.jiajunhui.xapp.medialoader.bean.BaseFolder;
-import com.jiajunhui.xapp.medialoader.bean.FileItem;
+import com.jiajunhui.xapp.medialoader.bean.AudioResult;
+import com.jiajunhui.xapp.medialoader.bean.FileResult;
 import com.jiajunhui.xapp.medialoader.bean.FileType;
-import com.jiajunhui.xapp.medialoader.bean.PhotoFolder;
-import com.jiajunhui.xapp.medialoader.bean.PhotoItem;
-import com.jiajunhui.xapp.medialoader.bean.VideoFolder;
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
+import com.jiajunhui.xapp.medialoader.bean.PhotoResult;
+import com.jiajunhui.xapp.medialoader.bean.VideoResult;
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnFileLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
+import com.jiajunhui.xapp.medialoader.filter.PhotoFilter;
+import com.jiajunhui.xapp.medialoader.inter.OnRecursionListener;
+import com.jiajunhui.xapp.medialoader.utils.RecursionLoader;
 
+import java.io.File;
 import java.util.List;
 
 import kr.co.namee.permissiongen.PermissionFail;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         tv_photo_info = (TextView) findViewById(R.id.tv_photo_info);
         tv_video_info = (TextView) findViewById(R.id.tv_video_info);
         tv_audio_info = (TextView) findViewById(R.id.tv_audio_info);
@@ -55,6 +56,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void recursionLoad() {
+        RecursionLoader.LoadParams params = new RecursionLoader.LoadParams();
+        //需要遍历的根目录
+        params.root = Environment.getExternalStorageDirectory();
+        //过滤器
+        params.fileFilter = new PhotoFilter();
+        RecursionLoader.load(params, new OnRecursionListener() {
+            @Override
+            public void onStart() {
+                System.out.println("load_log : start---->");
+            }
+
+            @Override
+            public void onItemAdd(File file) {
+                System.out.println("load_log : onItemAdd : " + file.getAbsolutePath());
+            }
+
+            @Override
+            public void onFinish(List<File> files) {
+                System.out.println("load_log : finish ***** size = " + files.size());
+
+            }
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -64,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     @PermissionSuccess(requestCode = 100)
     public void onPermissionSuccess(){
         start = System.currentTimeMillis();
+        recursionLoad();
         startLoad();
     }
 
@@ -74,22 +101,22 @@ public class MainActivity extends AppCompatActivity {
         final StringBuilder mInfos = new StringBuilder();
         MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.DOC) {
             @Override
-            public void onResult(List<FileItem> items) {
-                mInfos.append("doc file : " + items.size()).append("\n");
+            public void onResult(FileResult result) {
+                mInfos.append("doc file : " + result.getItems().size()).append("\n");
             }
         });
 
         MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.ZIP) {
             @Override
-            public void onResult(List<FileItem> items) {
-                mInfos.append("zip file : " + items.size()).append("\n");
+            public void onResult(FileResult result) {
+                mInfos.append("zip file : " + result.getItems().size()).append("\n");
             }
         });
 
         MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.APK) {
             @Override
-            public void onResult(List<FileItem> items) {
-                mInfos.append("apk file : " + items.size()).append("\n");
+            public void onResult(FileResult result) {
+                mInfos.append("apk file : " + result.getItems().size()).append("\n");
                 mInfos.append("consume time : " + (System.currentTimeMillis() - start)).append("ms");
                 tv_file_info.setText(mInfos.toString());
             }
@@ -104,14 +131,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadPhotos() {
         MediaLoader.getLoader().loadPhotos(this, new OnPhotoLoaderCallBack() {
             @Override
-            public void onResult(List<PhotoFolder> photoFolders, List<PhotoItem> photoItems) {
-                tv_photo_info.setText("图片: " + photoItems.size() + " 张");
-            }
-
-            @Override
-            public void onResultTotalSize(long size) {
-                super.onResultTotalSize(size);
-                System.out.println("photo_size = " + size);
+            public void onResult(PhotoResult result) {
+                tv_photo_info.setText("图片: " + result.getItems().size() + " 张");
             }
         });
     }
@@ -119,14 +140,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadAudios() {
         MediaLoader.getLoader().loadAudios(this, new OnAudioLoaderCallBack() {
             @Override
-            public void onResult(List<BaseFolder> baseFolders, List<AudioItem> audioItems) {
-                tv_audio_info.setText("音乐: " + audioItems.size() + " 个");
-            }
-
-            @Override
-            public void onResultTotalSize(long size) {
-                super.onResultTotalSize(size);
-                System.out.println("audio_size = " + size);
+            public void onResult(AudioResult result) {
+                tv_audio_info.setText("音乐: " + result.getItems().size() + " 个");
             }
         });
     }
@@ -134,14 +149,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadVideos() {
         MediaLoader.getLoader().loadVideos(this, new OnVideoLoaderCallBack() {
             @Override
-            public void onResult(List<VideoFolder> videoFolders, List<VideoItem> videoItems) {
-                tv_video_info.setText("视频: " + videoItems.size() + " 个");
-            }
-
-            @Override
-            public void onResultTotalSize(long size) {
-                super.onResultTotalSize(size);
-                System.out.println("video_size = " + size);
+            public void onResult(VideoResult result) {
+                tv_video_info.setText("视频: " + result.getItems().size() + " 个");
             }
         });
     }

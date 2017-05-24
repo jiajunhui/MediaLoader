@@ -75,9 +75,17 @@ public class MediaLoader {
     private void queueLoader(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
         loadMedia(activity, new AbsLoaderCallBack(activity,onLoaderCallBack){
             @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                super.onLoaderReset(loader);
+                mLoadQueue.clear();
+                Log.d(TAG,"***onLoaderReset***");
+            }
+
+            @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
                 super.onLoadFinished(loader, data);
                 mHandler.sendEmptyMessage(MSG_CODE_LOAD_FINISH);
+                Log.d(TAG,"***onLoaderFinished***");
             }
         });
     }

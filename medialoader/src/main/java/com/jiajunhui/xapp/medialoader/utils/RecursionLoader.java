@@ -16,179 +16,110 @@
 
 package com.jiajunhui.xapp.medialoader.utils;
 
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import com.jiajunhui.xapp.medialoader.bean.AudioItem;
-import com.jiajunhui.xapp.medialoader.bean.MediaType;
-import com.jiajunhui.xapp.medialoader.bean.PhotoItem;
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.jiajunhui.xapp.medialoader.inter.OnLoadListener;
+import android.os.AsyncTask;
+
+import com.jiajunhui.xapp.medialoader.inter.OnRecursionListener;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by Taurus on 2016/9/8.
  */
 public class RecursionLoader {
 
-    public static void loadMedia(final MediaType mediaType, final OnLoadListener onLoadListener){
-        if(onLoadListener !=null){
-            postOnStart(onLoadListener);
+    private static void load(File root, FileFilter filter,List<File> result, OnLoadListener onLoadListener){
+        if(root!=null && root.isDirectory()){
+            File[] files = root.listFiles();
+            Queue<File> dirQueue = new LinkedList<>();
+            if(files!=null && files.length>0){
+                for(File file : files){
+                    if(filter.accept(file)){
+                        result.add(file);
+                        if(onLoadListener!=null){
+                            onLoadListener.onItemAdd(file);
+                        }
+                    }
+                    if(file.isDirectory()){
+                        dirQueue.offer(file);
+                    }
+                }
+
+                while (!dirQueue.isEmpty()){
+                    File dir = dirQueue.poll();
+                    File[] dirFiles = dir.listFiles();
+                    if(dirFiles!=null && dirFiles.length>0){
+                        for(File file : dirFiles){
+                            if(filter.accept(file)){
+                                result.add(file);
+                                if(onLoadListener!=null){
+                                    onLoadListener.onItemAdd(file);
+                                }
+                            }
+                            if(file.isDirectory()){
+                                dirQueue.offer(file);
+                            }
+                        }
+                    }
+                }
+
+            }
         }
-        final List<VideoItem> videoItems = new ArrayList<>();
-        final List<AudioItem> audioItems = new ArrayList<>();
-        final List<PhotoItem> photoItems = new ArrayList<>();
-        new Thread(){
+    }
+
+
+    public static AsyncTask load(LoadParams params, final OnRecursionListener onRecursionListener){
+        return AsyncTaskExecutor.executeConcurrently(new AsyncTask<LoadParams, File, List<File>>() {
             @Override
-            public void run() {
-                super.run();
-                if(mediaType == MediaType.VIDEO){
-                    getVideos(videoItems, Environment.getExternalStorageDirectory());
-                    if(onLoadListener !=null){
-                        postOnResult(onLoadListener, videoItems);
-                    }
-                }else if(mediaType == MediaType.AUDIO){
-                    getAudios(audioItems, Environment.getExternalStorageDirectory());
-                    if(onLoadListener !=null){
-                        postOnResult(onLoadListener, audioItems);
-                    }
-                }else if(mediaType == MediaType.IMAGE){
-                    getPhotos(photoItems, Environment.getExternalStorageDirectory());
-                    if(onLoadListener !=null){
-                        postOnResult(onLoadListener, photoItems);
-                    }
+            protected void onPreExecute() {
+                super.onPreExecute();
+                if(onRecursionListener!=null){
+                    onRecursionListener.onStart();
                 }
             }
-        }.start();
 
-    }
-
-    private static void postOnResult(final OnLoadListener onLoadListener, final List<?> videoItems) {
-        Looper.prepare();
-        new Handler().post(new Runnable() {
             @Override
-            public void run() {
-                onLoadListener.onResultList(videoItems);
-            }
-        });
-        Looper.loop();
-    }
-
-    private static void postOnStart(final OnLoadListener onLoadListener) {
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                onLoadListener.onStart();
-            }
-        });
-    }
-
-    private static void getVideos(final List<VideoItem> list, File file){
-        file.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                // sdCard找到视频名称
-                String name = file.getName();
-
-                int i = name.indexOf('.');
-                if (i != -1) {
-                    name = name.substring(i);
-                    if (name.equalsIgnoreCase(".mp4")
-                            || name.equalsIgnoreCase(".3gp")
-                            || name.equalsIgnoreCase(".wmv")
-                            || name.equalsIgnoreCase(".ts")
-                            || name.equalsIgnoreCase(".rmvb")
-                            || name.equalsIgnoreCase(".mov")
-                            || name.equalsIgnoreCase(".m4v")
-                            || name.equalsIgnoreCase(".avi")
-                            || name.equalsIgnoreCase(".m3u8")
-                            || name.equalsIgnoreCase(".3gpp")
-                            || name.equalsIgnoreCase(".3gpp2")
-                            || name.equalsIgnoreCase(".mkv")
-                            || name.equalsIgnoreCase(".flv")
-                            || name.equalsIgnoreCase(".divx")
-                            || name.equalsIgnoreCase(".f4v")
-                            || name.equalsIgnoreCase(".rm")
-                            || name.equalsIgnoreCase(".asf")
-                            || name.equalsIgnoreCase(".ram")
-                            || name.equalsIgnoreCase(".mpg")
-                            || name.equalsIgnoreCase(".v8")
-                            || name.equalsIgnoreCase(".swf")
-                            || name.equalsIgnoreCase(".m2v")
-                            || name.equalsIgnoreCase(".asx")
-                            || name.equalsIgnoreCase(".ra")
-                            || name.equalsIgnoreCase(".ndivx")
-                            || name.equalsIgnoreCase(".xvid")) {
-                        VideoItem vi = new VideoItem();
-                        vi.setDisplayName(file.getName());
-                        vi.setPath(file.getAbsolutePath());
-                        vi.setSize(file.length());
-                        list.add(vi);
-                        return true;
+            protected List<File> doInBackground(LoadParams... params) {
+                List<File> result = new ArrayList<>();
+                LoadParams p = params[0];
+                load(p.root, p.fileFilter, result, new OnLoadListener() {
+                    @Override
+                    public void onItemAdd(File file) {
+                        publishProgress(file);
                     }
-                } else if (file.isDirectory()) {
-                    getVideos(list, file);
-                }
-                return false;
+                });
+                return result;
             }
-        });
+
+            @Override
+            protected void onProgressUpdate(File... values) {
+                super.onProgressUpdate(values);
+                if(onRecursionListener!=null){
+                    onRecursionListener.onItemAdd(values[0]);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<File> files) {
+                super.onPostExecute(files);
+                if(onRecursionListener!=null){
+                    onRecursionListener.onFinish(files);
+                }
+            }
+        },params);
     }
 
-    private static void getPhotos(final List<PhotoItem> list, File file){
-        file.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String name = file.getName();
-                int i = name.indexOf('.');
-                if (i != -1) {
-                    name = name.substring(i);
-                    if (file.length()>0 && (name.equalsIgnoreCase(".jpg")
-                            || name.equalsIgnoreCase(".jpeg")
-                            || name.equalsIgnoreCase(".png")
-                            || name.equalsIgnoreCase(".gif")
-                            || name.equalsIgnoreCase(".bmp"))) {
-                        PhotoItem vi = new PhotoItem();
-                        vi.setDisplayName(file.getName());
-                        vi.setPath(file.getAbsolutePath());
-                        list.add(vi);
-                        return true;
-                    }
-                } else if (file.isDirectory()) {
-                    getPhotos(list, file);
-                }
-                return false;
-            }
-        });
+    public static class LoadParams{
+        public File root;
+        public FileFilter fileFilter;
     }
 
-    private static void getAudios(final List<AudioItem> list, File file){
-        file.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String name = file.getName();
-                int i = name.indexOf('.');
-                if (i != -1) {
-                    name = name.substring(i);
-                    if (name.equalsIgnoreCase(".mp3")
-                            || name.equalsIgnoreCase(".wma")
-                            || name.equalsIgnoreCase(".wav")
-                            || name.equalsIgnoreCase(".aac")) {
-                        AudioItem vi = new AudioItem();
-                        vi.setDisplayName(file.getName());
-                        vi.setPath(file.getAbsolutePath());
-                        vi.setSize(file.length());
-                        list.add(vi);
-                        return true;
-                    }
-                } else if (file.isDirectory()) {
-                    getAudios(list, file);
-                }
-                return false;
-            }
-        });
+    public interface OnLoadListener{
+        void onItemAdd(File file);
     }
 
 }

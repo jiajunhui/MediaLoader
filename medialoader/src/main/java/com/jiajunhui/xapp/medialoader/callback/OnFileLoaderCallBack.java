@@ -7,6 +7,7 @@ import android.support.v4.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.FileItem;
 import com.jiajunhui.xapp.medialoader.bean.FileProperty;
+import com.jiajunhui.xapp.medialoader.bean.FileResult;
 import com.jiajunhui.xapp.medialoader.bean.FileType;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import static android.provider.MediaStore.Files.FileColumns.MIME_TYPE;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack {
+public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack<FileResult> {
 
     public OnFileLoaderCallBack() {
     }
@@ -51,8 +52,7 @@ public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack {
             result.add(item);
             sum_size += size;
         }
-        onResult(result);
-        onResultTotalSize(sum_size);
+        onResult(new FileResult(sum_size,result));
     }
 
 }

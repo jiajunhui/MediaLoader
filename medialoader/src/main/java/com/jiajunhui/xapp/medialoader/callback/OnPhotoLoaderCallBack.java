@@ -7,6 +7,7 @@ import android.support.v4.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.PhotoFolder;
 import com.jiajunhui.xapp.medialoader.bean.PhotoItem;
+import com.jiajunhui.xapp.medialoader.bean.PhotoResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +23,16 @@ import static android.provider.MediaStore.MediaColumns.SIZE;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class OnPhotoLoaderCallBack extends OnMediaLoaderCallBack<PhotoFolder,PhotoItem> {
+public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResult> {
 
     @Override
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
         List<PhotoFolder> folders = new ArrayList<>();
+        List<PhotoItem> allPhotos = new ArrayList<>();
         if(data == null){
-            onResult(folders,null);
+            onResult(new PhotoResult(folders,allPhotos));
             return;
         }
-        List<PhotoItem> allPhotos = new ArrayList<>();
         PhotoFolder folder;
         PhotoItem item;
         long sum_size = 0;
@@ -56,8 +57,7 @@ public abstract class OnPhotoLoaderCallBack extends OnMediaLoaderCallBack<PhotoF
             allPhotos.add(item);
             sum_size += size;
         }
-        onResult(folders,allPhotos);
-        onResultTotalSize(sum_size);
+        onResult(new PhotoResult(folders,allPhotos,sum_size));
     }
 
     @Override

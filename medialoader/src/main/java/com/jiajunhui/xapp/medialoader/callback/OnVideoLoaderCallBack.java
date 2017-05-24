@@ -7,6 +7,7 @@ import android.support.v4.content.Loader;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoFolder;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
+import com.jiajunhui.xapp.medialoader.bean.VideoResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ import static android.provider.MediaStore.Video.VideoColumns.DURATION;
  * Created by Taurus on 2017/5/23.
  */
 
-public abstract class OnVideoLoaderCallBack extends OnMediaLoaderCallBack<VideoFolder,VideoItem> {
+public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResult> {
 
     @Override
     public void onLoadFinish(Loader<Cursor> loader, Cursor data) {
@@ -53,8 +54,7 @@ public abstract class OnVideoLoaderCallBack extends OnMediaLoaderCallBack<VideoF
             items.add(item);
             sum_size += size;
         }
-        onResult(folders,items);
-        onResultTotalSize(sum_size);
+        onResult(new VideoResult(folders,items,sum_size));
     }
 
     @Override
