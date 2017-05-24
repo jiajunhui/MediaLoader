@@ -1,6 +1,7 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
 import android.Manifest;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_file_info;
 
     private long start;
+    private AsyncTask mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         params.root = Environment.getExternalStorageDirectory();
         //过滤器
         params.fileFilter = new PhotoFilter();
-        RecursionLoader.load(params, new OnRecursionListener() {
+        mTask = RecursionLoader.load(params, new OnRecursionListener() {
             @Override
             public void onStart() {
                 System.out.println("load_log : start---->");
@@ -155,4 +157,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mTask!=null){
+            mTask.cancel(true);
+        }
+    }
 }

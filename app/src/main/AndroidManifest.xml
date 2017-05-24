@@ -20,7 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CustomLoadActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
