@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface OnRecursionListener {
     void onStart();
-    void onItemAdd(File file);
+    void onItemAdd(File file, int counter);
     void onFinish(List<File> files);
 }

@@ -45,4 +45,14 @@
         android:textColor="#3344aa"
         android:text="" />
 
+    <TextView
+        android:id="@+id/tv_traversal_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:textColor="#882211"
+        android:text="" />
+
 </LinearLayout>

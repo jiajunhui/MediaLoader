@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_video_info;
     private TextView tv_audio_info;
     private TextView tv_file_info;
+    private TextView tv_traversal_info;
 
     private long start;
     private AsyncTask mTask;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         tv_video_info = (TextView) findViewById(R.id.tv_video_info);
         tv_audio_info = (TextView) findViewById(R.id.tv_audio_info);
         tv_file_info = (TextView) findViewById(R.id.tv_file_info);
+        tv_traversal_info = (TextView) findViewById(R.id.tv_traversal_info);
 
         PermissionGen.with(MainActivity.this)
                 .addRequestCode(100)
@@ -71,14 +73,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemAdd(File file) {
+            public void onItemAdd(File file, int counter) {
                 System.out.println("load_log : onItemAdd : " + file.getAbsolutePath());
+                tv_traversal_info.setText("number : " + counter + " : " + file.getAbsolutePath());
             }
 
             @Override
             public void onFinish(List<File> files) {
                 System.out.println("load_log : finish ***** size = " + files.size());
-
+                tv_traversal_info.setText("number : " + files.size());
             }
         });
     }

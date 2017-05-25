@@ -44,7 +44,7 @@ public class TraversalSearchLoader {
                         if(filter.accept(file)){
                             result.add(file);
                             if(onLoadListener!=null){
-                                onLoadListener.onItemAdd(file);
+                                onLoadListener.onItemAdd(file, result.size());
                             }
                         }
                         if(file.isDirectory()){
@@ -68,9 +68,9 @@ public class TraversalSearchLoader {
         List<File> result = new ArrayList<>();
         load(params.root, params.fileFilter, result, new OnLoadListener() {
             @Override
-            public void onItemAdd(File file) {
+            public void onItemAdd(File file, int counter) {
                 if(onRecursionListener!=null){
-                    onRecursionListener.onItemAdd(file);
+                    onRecursionListener.onItemAdd(file, counter);
                 }
             }
         });
@@ -86,7 +86,7 @@ public class TraversalSearchLoader {
      * @return return a AsyncTask , and you can cancel load.
      */
     public static AsyncTask loadAsync(LoadParams params, final OnRecursionListener onRecursionListener){
-        return AsyncTaskExecutor.executeConcurrently(new AsyncTask<LoadParams, File, List<File>>() {
+        return AsyncTaskExecutor.executeConcurrently(new AsyncTask<LoadParams, LoadProgress, List<File>>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -101,18 +101,19 @@ public class TraversalSearchLoader {
                 LoadParams p = params[0];
                 load(p.root, p.fileFilter, result, new OnLoadListener() {
                     @Override
-                    public void onItemAdd(File file) {
-                        publishProgress(file);
+                    public void onItemAdd(File file, int counter) {
+                        publishProgress(new LoadProgress(file, counter));
                     }
                 });
                 return result;
             }
 
             @Override
-            protected void onProgressUpdate(File... values) {
+            protected void onProgressUpdate(LoadProgress... values) {
                 super.onProgressUpdate(values);
                 if(onRecursionListener!=null){
-                    onRecursionListener.onItemAdd(values[0]);
+                    LoadProgress progress = values[0];
+                    onRecursionListener.onItemAdd(progress.file,progress.counter);
                 }
             }
 
@@ -131,8 +132,18 @@ public class TraversalSearchLoader {
         public FileFilter fileFilter;
     }
 
+    private static class LoadProgress{
+        public File file;
+        public int counter;
+
+        public LoadProgress(File file, int counter) {
+            this.file = file;
+            this.counter = counter;
+        }
+    }
+
     private interface OnLoadListener{
-        void onItemAdd(File file);
+        void onItemAdd(File file, int counter);
     }
 
 }
