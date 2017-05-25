@@ -30,43 +30,28 @@ import java.util.Queue;
 /**
  * Created by Taurus on 2016/9/8.
  */
-public class RecursionLoader {
+public class TraversalSearchLoader {
 
     private static void load(File root, FileFilter filter,List<File> result, OnLoadListener onLoadListener){
         if(root!=null && root.isDirectory()){
-            File[] files = root.listFiles();
             Queue<File> dirQueue = new LinkedList<>();
-            if(files!=null && files.length>0){
-                for(File file : files){
-                    if(filter.accept(file)){
-                        result.add(file);
-                        if(onLoadListener!=null){
-                            onLoadListener.onItemAdd(file);
+            dirQueue.offer(root);
+            while (!dirQueue.isEmpty()){
+                File dir = dirQueue.poll();
+                File[] dirFiles = dir.listFiles();
+                if(dirFiles!=null && dirFiles.length>0){
+                    for(File file : dirFiles){
+                        if(filter.accept(file)){
+                            result.add(file);
+                            if(onLoadListener!=null){
+                                onLoadListener.onItemAdd(file);
+                            }
                         }
-                    }
-                    if(file.isDirectory()){
-                        dirQueue.offer(file);
-                    }
-                }
-
-                while (!dirQueue.isEmpty()){
-                    File dir = dirQueue.poll();
-                    File[] dirFiles = dir.listFiles();
-                    if(dirFiles!=null && dirFiles.length>0){
-                        for(File file : dirFiles){
-                            if(filter.accept(file)){
-                                result.add(file);
-                                if(onLoadListener!=null){
-                                    onLoadListener.onItemAdd(file);
-                                }
-                            }
-                            if(file.isDirectory()){
-                                dirQueue.offer(file);
-                            }
+                        if(file.isDirectory()){
+                            dirQueue.offer(file);
                         }
                     }
                 }
-
             }
         }
     }

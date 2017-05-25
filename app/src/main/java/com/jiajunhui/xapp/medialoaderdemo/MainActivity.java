@@ -21,7 +21,7 @@ import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.filter.PhotoFilter;
 import com.jiajunhui.xapp.medialoader.inter.OnRecursionListener;
-import com.jiajunhui.xapp.medialoader.utils.RecursionLoader;
+import com.jiajunhui.xapp.medialoader.utils.TraversalSearchLoader;
 
 import java.io.File;
 import java.util.List;
@@ -59,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void recursionLoad() {
-        RecursionLoader.LoadParams params = new RecursionLoader.LoadParams();
+        TraversalSearchLoader.LoadParams params = new TraversalSearchLoader.LoadParams();
         //需要遍历的根目录
         params.root = Environment.getExternalStorageDirectory();
         //过滤器
         params.fileFilter = new PhotoFilter();
-        mTask = RecursionLoader.load(params, new OnRecursionListener() {
+        mTask = TraversalSearchLoader.load(params, new OnRecursionListener() {
             @Override
             public void onStart() {
                 System.out.println("load_log : start---->");
