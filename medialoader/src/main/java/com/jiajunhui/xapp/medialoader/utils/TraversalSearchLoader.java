@@ -56,8 +56,36 @@ public class TraversalSearchLoader {
         }
     }
 
+    /**
+     * synchronized load , may be you need start a thread.
+     * @param params
+     * @param onRecursionListener
+     */
+    public static void loadSync(LoadParams params, final OnRecursionListener onRecursionListener){
+        if(onRecursionListener!=null){
+            onRecursionListener.onStart();
+        }
+        List<File> result = new ArrayList<>();
+        load(params.root, params.fileFilter, result, new OnLoadListener() {
+            @Override
+            public void onItemAdd(File file) {
+                if(onRecursionListener!=null){
+                    onRecursionListener.onItemAdd(file);
+                }
+            }
+        });
+        if(onRecursionListener!=null){
+            onRecursionListener.onFinish(result);
+        }
+    }
 
-    public static AsyncTask load(LoadParams params, final OnRecursionListener onRecursionListener){
+    /**
+     * async load .
+     * @param params
+     * @param onRecursionListener
+     * @return return a AsyncTask , and you can cancel load.
+     */
+    public static AsyncTask loadAsync(LoadParams params, final OnRecursionListener onRecursionListener){
         return AsyncTaskExecutor.executeConcurrently(new AsyncTask<LoadParams, File, List<File>>() {
             @Override
             protected void onPreExecute() {
@@ -103,7 +131,7 @@ public class TraversalSearchLoader {
         public FileFilter fileFilter;
     }
 
-    public interface OnLoadListener{
+    private interface OnLoadListener{
         void onItemAdd(File file);
     }
 

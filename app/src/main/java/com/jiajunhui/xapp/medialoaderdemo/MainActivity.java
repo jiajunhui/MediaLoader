@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         params.root = Environment.getExternalStorageDirectory();
         //过滤器
         params.fileFilter = new PhotoFilter();
-        mTask = TraversalSearchLoader.load(params, new OnRecursionListener() {
+        mTask = TraversalSearchLoader.loadAsync(params, new OnRecursionListener() {
             @Override
             public void onStart() {
                 System.out.println("load_log : start---->");
