@@ -1,13 +1,10 @@
 package com.jiajunhui.xapp.medialoaderdemo;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Environment;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,20 +16,14 @@ import com.jiajunhui.xapp.medialoader.bean.PhotoResult;
 import com.jiajunhui.xapp.medialoader.bean.VideoResult;
 import com.jiajunhui.xapp.medialoader.callback.OnAudioLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnFileLoaderCallBack;
-import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.callback.OnPhotoLoaderCallBack;
-import com.jiajunhui.xapp.medialoader.filter.PhotoFilter;
-import com.jiajunhui.xapp.medialoader.inter.OnRecursionListener;
-import com.jiajunhui.xapp.medialoader.utils.TraversalSearchLoader;
-
-import java.io.File;
-import java.util.List;
+import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     private TextView tv_photo_info;
     private TextView tv_video_info;
@@ -54,46 +45,12 @@ public class MainActivity extends AppCompatActivity {
         tv_file_info = (TextView) findViewById(R.id.tv_file_info);
         tv_traversal_info = (TextView) findViewById(R.id.tv_traversal_info);
 
-        findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),MainActivity2.class);
-                startActivity(intent);
-            }
-        });
-
-        PermissionGen.with(MainActivity.this)
+        PermissionGen.with(MainActivity2.this)
                 .addRequestCode(100)
                 .permissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE)
                 .request();
 
-    }
-
-    private void recursionLoad() {
-        TraversalSearchLoader.LoadParams params = new TraversalSearchLoader.LoadParams();
-        //需要遍历的根目录
-        params.root = Environment.getExternalStorageDirectory();
-        //过滤器
-        params.fileFilter = new PhotoFilter();
-        mTask = TraversalSearchLoader.loadAsync(params, new OnRecursionListener() {
-            @Override
-            public void onStart() {
-                System.out.println("load_log : start---->");
-            }
-
-            @Override
-            public void onItemAdd(File file, int counter) {
-                System.out.println("load_log : onItemAdd : " + file.getAbsolutePath());
-                tv_traversal_info.setText("number : " + counter + " : " + file.getAbsolutePath());
-            }
-
-            @Override
-            public void onFinish(List<File> files) {
-                System.out.println("load_log : finish ***** size = " + files.size());
-                tv_traversal_info.setText("number : " + files.size());
-            }
-        });
     }
 
     @Override
@@ -105,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @PermissionSuccess(requestCode = 100)
     public void onPermissionSuccess(){
         start = System.currentTimeMillis();
-        recursionLoad();
         startLoad();
     }
 
@@ -114,21 +70,21 @@ public class MainActivity extends AppCompatActivity {
         loadAudios();
         loadVideos();
         final StringBuilder mInfos = new StringBuilder();
-        MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.DOC) {
+        MediaLoader.getLoader().loadFiles(MainActivity2.this, new OnFileLoaderCallBack(FileType.DOC) {
             @Override
             public void onResult(FileResult result) {
                 mInfos.append("doc file : " + result.getItems().size()).append("\n");
             }
         });
 
-        MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.ZIP) {
+        MediaLoader.getLoader().loadFiles(MainActivity2.this, new OnFileLoaderCallBack(FileType.ZIP) {
             @Override
             public void onResult(FileResult result) {
                 mInfos.append("zip file : " + result.getItems().size()).append("\n");
             }
         });
 
-        MediaLoader.getLoader().loadFiles(MainActivity.this, new OnFileLoaderCallBack(FileType.APK) {
+        MediaLoader.getLoader().loadFiles(MainActivity2.this, new OnFileLoaderCallBack(FileType.APK) {
             @Override
             public void onResult(FileResult result) {
                 mInfos.append("apk file : " + result.getItems().size()).append("\n");
