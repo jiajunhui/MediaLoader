@@ -12,6 +12,7 @@ dependencies {
 Usage
 ====
 ###add permission
+
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
@@ -21,6 +22,7 @@ In android M device , please pay attention to the Runtime Permission.
 ####Load Images
 load images folders
 <br>
+
 ```java
 MediaLoader.loadPhotoFolders(this, new OnPhotoFolderLoaderCallBack() {
             @Override
@@ -32,6 +34,7 @@ MediaLoader.loadPhotoFolders(this, new OnPhotoFolderLoaderCallBack() {
 <br>
 load all images
 <br>
+
 ```java
 MediaLoader.loadPhotos(this, new OnPhotoLoaderCallBack() {
             @Override
@@ -43,6 +46,7 @@ MediaLoader.loadPhotos(this, new OnPhotoLoaderCallBack() {
 ####Load Videos
 load videos folders
 <br>
+
 ```java
 MediaLoader.loadVideoFolders(this, new OnVideoFolderLoaderCallBack() {
             @Override
@@ -54,6 +58,7 @@ MediaLoader.loadVideoFolders(this, new OnVideoFolderLoaderCallBack() {
 <br>
 load all videos
 <br>
+
 ```java
 MediaLoader.loadVideos(this, new OnVideoLoaderCallBack() {
             @Override
@@ -65,6 +70,7 @@ MediaLoader.loadVideos(this, new OnVideoLoaderCallBack() {
 ####Load Audios
 load all audios
 <br>
+
 ```java
 MediaLoader.loadAudios(this, new OnAudioLoaderCallBack() {
             @Override
@@ -75,6 +81,7 @@ MediaLoader.loadAudios(this, new OnAudioLoaderCallBack() {
 ```
 Custom Loader
 ====
+
 ```java
 public class MyPhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
     public MyPhotoCursorLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack) {
@@ -108,6 +115,7 @@ public class MyPhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
 }
 ```
 <br>
+
 ```java
 MediaLoader.loadMedia(this,new MyPhotoCursorLoaderCallBack(getApplicationContext(), new OnLoaderCallBack() {
             @Override
