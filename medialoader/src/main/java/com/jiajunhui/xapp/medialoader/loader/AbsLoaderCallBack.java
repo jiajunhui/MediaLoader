@@ -19,6 +19,7 @@ package com.jiajunhui.xapp.medialoader.loader;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
@@ -33,6 +34,7 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
 
     private WeakReference<Context> context;
     private OnLoaderCallBack onLoaderCallBack;
+    private int mLoaderId;
 
     public AbsLoaderCallBack(Context context, OnLoaderCallBack onLoaderCallBack){
         this.context = new WeakReference<>(context);
@@ -41,12 +43,27 @@ public abstract class AbsLoaderCallBack implements LoaderManager.LoaderCallbacks
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new BaseCursorLoader(context.get(),onLoaderCallBack);
+        mLoaderId = id;
+        return new BaseCursorLoader(context.get(), onLoaderCallBack);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         onLoaderCallBack.onLoadFinish(loader, data);
+        destroyLoader();
+    }
+
+    private void destroyLoader(){
+        try {
+            if(context!=null){
+                Context ctx = this.context.get();
+                if(ctx!=null){
+                    ((FragmentActivity)ctx).getSupportLoaderManager().destroyLoader(mLoaderId);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

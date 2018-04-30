@@ -28,10 +28,14 @@ import java.util.Queue;
 
 public class MediaLoader {
 
+    private static final int DEFAULT_START_ID = 1000;
+
     private final String TAG = "MediaLoader";
     private static MediaLoader loader = new MediaLoader();
 
     private Map<String,Queue<LoaderTask>> mTaskGroup = new HashMap<>();
+
+    private Map<String,Integer> mIds = new HashMap<>();
 
     private final int MSG_CODE_LOAD_FINISH = 101;
     private final int MSG_CODE_LOAD_START = 102;
@@ -69,8 +73,23 @@ public class MediaLoader {
         return loader;
     }
 
+    private int checkIds(FragmentActivity activity){
+        String name = activity.getClass().getName();
+        int id;
+        if(!mIds.containsKey(name)){
+            id = DEFAULT_START_ID;
+            mIds.put(name, id);
+        }else{
+            int preId = mIds.get(name);
+            preId++;
+            mIds.put(name, preId);
+            id = preId;
+        }
+        return id;
+    }
+
     private void loadMedia(FragmentActivity activity, AbsLoaderCallBack absLoaderCallBack){
-        activity.getSupportLoaderManager().restartLoader(0,null,absLoaderCallBack);
+        activity.getSupportLoaderManager().restartLoader(checkIds(activity),null,absLoaderCallBack);
     }
 
     private synchronized void load(FragmentActivity activity, OnLoaderCallBack onLoaderCallBack){
