@@ -14,6 +14,7 @@ import java.util.List;
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Audio.AudioColumns.DURATION;
 import static android.provider.MediaStore.MediaColumns.DATA;
+import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.MediaColumns.SIZE;
 
@@ -35,11 +36,13 @@ public abstract class OnAudioLoaderCallBack extends BaseLoaderCallBack<AudioResu
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
+            long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
             item.setId(audioId);
             item.setDisplayName(name);
             item.setPath(path);
             item.setDuration(duration);
             item.setSize(size);
+            item.setModified(modified);
             result.add(item);
             sum_size += size;
         }

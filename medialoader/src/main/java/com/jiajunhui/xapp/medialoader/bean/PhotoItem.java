@@ -32,4 +32,8 @@ public class PhotoItem extends BaseItem {
     public PhotoItem(int id, String displayName, String path, long size) {
         super(id, displayName, path, size);
     }
+
+    public PhotoItem(int id, String displayName, String path, long size, long modified) {
+        super(id, displayName, path, size, modified);
+    }
 }

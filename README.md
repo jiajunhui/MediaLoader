@@ -6,7 +6,7 @@ you can visit my site : [jiajunhui.cn](http://www.jiajunhui.cn)
 # Dependency
 ```gradle
 dependencies {
-    compile 'com.jiajunhui.xapp.medialoader:medialoader:1.1.7'
+    compile 'com.jiajunhui.xapp.medialoader:medialoader:1.1.8'
 }
 ```
 ###release

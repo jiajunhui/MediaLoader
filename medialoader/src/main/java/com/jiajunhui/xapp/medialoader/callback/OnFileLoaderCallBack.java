@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.MediaStore.Files.FileColumns.MIME_TYPE;
+import static android.provider.MediaStore.Files.FileColumns.DATE_MODIFIED;
 
 /**
  * Created by Taurus on 2017/5/23.
@@ -44,11 +45,13 @@ public abstract class OnFileLoaderCallBack extends BaseFileLoaderCallBack<FileRe
             long size = data.getLong(data.getColumnIndexOrThrow(MediaStore.MediaColumns.SIZE));
             String name = data.getString(data.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME));
             String mime = data.getString(data.getColumnIndexOrThrow(MIME_TYPE));
+            long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
             item.setId(audioId);
             item.setDisplayName(name);
             item.setPath(path);
             item.setSize(size);
             item.setMime(mime);
+            item.setModified(modified);
             result.add(item);
             sum_size += size;
         }

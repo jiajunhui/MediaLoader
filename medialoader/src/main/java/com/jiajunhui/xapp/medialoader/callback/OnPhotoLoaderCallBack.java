@@ -16,6 +16,7 @@ import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_ID;
 import static android.provider.MediaStore.MediaColumns.DATA;
+import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.MediaColumns.SIZE;
 
@@ -43,10 +44,11 @@ public abstract class OnPhotoLoaderCallBack extends BaseLoaderCallBack<PhotoResu
             String name = data.getString(data.getColumnIndexOrThrow(DISPLAY_NAME));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
+            long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
             folder = new PhotoFolder();
             folder.setId(folderId);
             folder.setName(folderName);
-            item = new PhotoItem(imageId,name,path,size);
+            item = new PhotoItem(imageId,name,path,size,modified);
             if(folders.contains(folder)){
                 folders.get(folders.indexOf(folder)).addItem(item);
             }else{

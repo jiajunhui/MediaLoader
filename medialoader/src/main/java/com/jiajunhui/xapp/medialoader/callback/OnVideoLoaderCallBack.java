@@ -14,6 +14,7 @@ import java.util.List;
 
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.MediaColumns.DATA;
+import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;
 import static android.provider.MediaStore.MediaColumns.DISPLAY_NAME;
 import static android.provider.MediaStore.MediaColumns.SIZE;
 import static android.provider.MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME;
@@ -41,7 +42,8 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
             String path = data.getString(data.getColumnIndexOrThrow(DATA));
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
-            item = new VideoItem(videoId,name,path,duration,size);
+            long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
+            item = new VideoItem(videoId,name,path,duration,size,modified);
             folder = new VideoFolder();
             folder.setId(folderId);
             folder.setName(folderName);
