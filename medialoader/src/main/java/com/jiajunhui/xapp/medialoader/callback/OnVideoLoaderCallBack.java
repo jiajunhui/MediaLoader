@@ -43,7 +43,7 @@ public abstract class OnVideoLoaderCallBack extends BaseLoaderCallBack<VideoResu
             long duration = data.getLong(data.getColumnIndexOrThrow(DURATION));
             long size = data.getLong(data.getColumnIndexOrThrow(SIZE));
             long modified = data.getLong(data.getColumnIndexOrThrow(DATE_MODIFIED));
-            item = new VideoItem(videoId,name,path,duration,size,modified);
+            item = new VideoItem(videoId,name,path,size,modified,duration);
             folder = new VideoFolder();
             folder.setId(folderId);
             folder.setName(folderName);

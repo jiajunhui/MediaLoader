@@ -21,14 +21,10 @@ package com.jiajunhui.xapp.medialoader.bean;
  * Created by Taurus on 16/8/28.
  */
 public class VideoItem extends BaseItem {
+
     private long duration;
 
     public VideoItem() {
-    }
-
-    public VideoItem(int id, String displayName, String path, long duration, long size) {
-        super(id, displayName, path, size);
-        this.duration = duration;
     }
 
     public VideoItem(int id, String displayName, String path, long size, long modified, long duration) {
