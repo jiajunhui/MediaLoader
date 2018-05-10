@@ -7,6 +7,7 @@ package com.jiajunhui.xapp.medialoader.bean;
 public class FileItem extends BaseItem {
 
     private String mime;
+    private boolean checked;
 
     public String getMime() {
         return mime;
@@ -16,4 +17,11 @@ public class FileItem extends BaseItem {
         this.mime = mime;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

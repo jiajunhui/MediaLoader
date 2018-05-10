@@ -23,6 +23,7 @@ package com.jiajunhui.xapp.medialoader.bean;
 public class VideoItem extends BaseItem {
 
     private long duration;
+    private boolean checked;
 
     public VideoItem() {
     }
@@ -40,4 +41,11 @@ public class VideoItem extends BaseItem {
         this.duration = duration;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

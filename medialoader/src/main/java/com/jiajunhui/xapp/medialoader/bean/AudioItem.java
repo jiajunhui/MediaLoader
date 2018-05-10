@@ -22,6 +22,7 @@ package com.jiajunhui.xapp.medialoader.bean;
  */
 public class AudioItem extends BaseItem {
     private long duration;
+    private boolean checked;
 
     public long getDuration() {
         return duration;
@@ -31,4 +32,11 @@ public class AudioItem extends BaseItem {
         this.duration = duration;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

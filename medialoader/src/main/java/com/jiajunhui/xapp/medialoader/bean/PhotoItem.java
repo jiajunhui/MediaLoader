@@ -22,6 +22,8 @@ package com.jiajunhui.xapp.medialoader.bean;
  */
 public class PhotoItem extends BaseItem {
 
+    private boolean checked;
+
     public PhotoItem() {
     }
 
@@ -35,5 +37,13 @@ public class PhotoItem extends BaseItem {
 
     public PhotoItem(int id, String displayName, String path, long size, long modified) {
         super(id, displayName, path, size, modified);
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
