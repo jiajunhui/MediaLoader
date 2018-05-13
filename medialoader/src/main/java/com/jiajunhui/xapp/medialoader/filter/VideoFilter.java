@@ -11,7 +11,7 @@ public class VideoFilter implements FileFilter {
     @Override
     public boolean accept(File pathname) {
         String name = pathname.getName();
-        int i = name.indexOf('.');
+        int i = name.lastIndexOf('.');
         if (i != -1) {
             name = name.substring(i);
             if (name.equalsIgnoreCase(".mp4")

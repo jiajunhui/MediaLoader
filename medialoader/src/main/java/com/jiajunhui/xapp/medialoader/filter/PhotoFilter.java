@@ -13,7 +13,7 @@ public class PhotoFilter implements FileFilter {
         if(pathname.length()<=0)
             return false;
         String name = pathname.getName();
-        int i = name.indexOf('.');
+        int i = name.lastIndexOf('.');
         if (i != -1) {
             name = name.substring(i);
             if (name.equalsIgnoreCase(".jpg")
