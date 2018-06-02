@@ -4,24 +4,27 @@ Use this library , you can load pictures,videos,audios very fast in Phone Storag
 <br>
 you can visit my site : [jiajunhui.cn](http://www.jiajunhui.cn)
 # Dependency
+
 ```gradle
 dependencies {
     compile 'com.jiajunhui.xapp.medialoader:medialoader:1.2.1'
 }
 ```
-###release
+**release**
+
 [release jar](https://github.com/jiajunhui/MediaLoader/blob/master/release/medialoader.jar)
-Usage
-====
-###add permission
+
+add permission
 
 ```xml
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
 <br>
 In android M device , please pay attention to the Runtime Permission.
-###Default Loader
-####Load Images
+
+## Default Loader
+**Load Images**
+
 load images folders
 <br>
 
@@ -45,7 +48,8 @@ MediaLoader.loadPhotos(this, new OnPhotoLoaderCallBack() {
             }
         });
 ```
-####Load Videos
+**Load Videos**
+
 load videos folders
 <br>
 
@@ -69,7 +73,8 @@ MediaLoader.loadVideos(this, new OnVideoLoaderCallBack() {
             }
         });
 ```
-####Load Audios
+**Load Audios**
+
 load all audios
 <br>
 
@@ -81,8 +86,7 @@ MediaLoader.loadAudios(this, new OnAudioLoaderCallBack() {
             }
         });
 ```
-Custom Loader
-====
+## Custom Loader
 
 ```java
 public class MyPhotoCursorLoaderCallBack extends BasePhotoCursorLoaderCallBack {
