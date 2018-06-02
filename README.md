@@ -2,7 +2,7 @@ MediaLoader
 ====
 Use this library , you can load pictures,videos,audios very fast in Phone Storage.
 <br>
-you can visit my site : [jiajunhui.cn](http://www.jiajunhui.cn)
+you can visit my site : [MediaLoader](http://jiajunhui.cn/project_mediaload/#more)
 # Dependency
 
 ```gradle
@@ -10,7 +10,6 @@ dependencies {
     compile 'com.jiajunhui.xapp.medialoader:medialoader:1.2.1'
 }
 ```
-**release**
 
 [release jar](https://github.com/jiajunhui/MediaLoader/blob/master/release/medialoader.jar)
 
