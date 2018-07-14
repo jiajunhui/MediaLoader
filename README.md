@@ -1,4 +1,4 @@
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/images/logo.png)
+![image](https://github.com/jiajunhui/MediaLoader/raw/master/images/logo.png)
 MediaLoader
 ====
 Use this library , you can load pictures,videos,audios very fast in Phone Storage.
